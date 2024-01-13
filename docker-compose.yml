@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    build: .  # Sử dụng Dockerfile trong thư mục hiện tại
+    ports:
+      - "8081:8081"  # Ánh xạ cổng 8081 của máy host vào cổng 8081 của container
+    depends_on:
+      - db  # Đảm bảo rằng dịch vụ db chạy trước khi dịch vụ app chạy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/iot_food_04
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Quocviet2003@
+
+  db:
+    image: mysql:8.0  # Sử dụng phiên bản MySQL phù hợp với MySQL Workbench của bạn
+    ports:
+      - "3307:3306"  # Ánh xạ cổng 3306 để có thể truy cập MySQL từ máy host
+    environment:
+      - MYSQL_DATABASE=iot_food_04
+      - MYSQL_ROOT_PASSWORD=Quocviet2003@
+    volumes:
+      - db-data:/var/lib/mysql  # Dữ liệu MySQL được lưu trong volume để không mất khi container bị xóa
+
+volumes:
+  db-data:  # Định nghĩa volume để dữ liệu không mất khi container được tái tạo
